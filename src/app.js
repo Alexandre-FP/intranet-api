@@ -6,7 +6,6 @@ import cors from "cors";
 import { secretaria, departamento, telefone } from "./routes/index.js";
 
 const app = express();
-const PORT = 4001;
 
 app.use(json());
 app.use(morgan("dev")); 
@@ -17,6 +16,6 @@ app.use("/api/secretaria", secretaria);
 app.use("/api/departamento", departamento);
 app.use("/api/telefone", telefone);
 
-app.listen(PORT, () => console.log(`✅ Servidor rodando na porta ${PORT}`)); 
+export default app;
 
 

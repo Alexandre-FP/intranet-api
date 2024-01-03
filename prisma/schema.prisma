@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SituacaoEnum {
+  ATIVADO
+  DESATIVADO
+  EXCLUIDO
+}
+
+model Secretaria {
+  id               Int       @id       @default(autoincrement())
+  nome             String  
+  sigla            String
+  criadoEm         DateTime         @default(now())
+  situacao         SituacaoEnum     @default(ATIVADO)
+  atualizadoEm     DateTime         @updatedAt
+  departamentos    Departamento[]
+
+  @@map("secretarias")
+}
+
+model Departamento {
+  id               Int       @id       @default(autoincrement())
+  nome             String
+  criadoEm         DateTime         @default(now())
+  atualizadoEm     DateTime         @updatedAt
+  situacao         SituacaoEnum     @default(ATIVADO)
+  secretaria       Secretaria       @relation(fields: [secretariaId], references: [id])
+  secretariaId     Int
+  telefones        Telefone[]
+
+  @@map("departamentos")
+}
+
+model Telefone {
+  id               Int       @id       @default(autoincrement())
+  numero           String
+  criadoEm         DateTime         @default(now())
+  images           String?
+  atualizadoEm     DateTime         @updatedAt
+  situacao         SituacaoEnum     @default(ATIVADO)
+  departamento     Departamento     @relation(fields: [departamentoId], references: [id])
+  departamentoId   Int
+
+  @@map("telefones")
+} 
+

@@ -10,7 +10,7 @@ class DepartamentoController {
       }
     });
 
-    return res.status(201).json({ content: createDepartamento });
+    return res.status(201).json({ content: createDepartamento }); 
   }
 
   async listarDepartamento(req, res){

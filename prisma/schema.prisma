@@ -67,14 +67,14 @@ model Cargo {
   @@map("cargos") 
 }
 
-model User {
-  id               Int       @id       @default(autoincrement())
-  nome             String
-  senha            String
+model Usuario {
+  id               Int       @id    @default(autoincrement())
+  nome             String           @db.VarChar(60)
+  senha            String           @db.VarChar(60)
   criadoEm         DateTime         @default(now())
   atualizadoEm     DateTime         @updatedAt 
   situacao         SituacaoEnum     @default(ATIVADO)
 
-  @@map("users")
+  @@map("usuarios")
 }
 

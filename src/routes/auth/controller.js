@@ -1,23 +1,26 @@
 import prisma from "../../db/index.js";
 import jwt from "jsonwebtoken";
-import bcryptjs from "bcryptjs";
+import bcrypt from "bcryptjs"
 import _ from "lodash";
 
 class UsuarioController {
     async createUsuario(req, res){
-        const { body } = req
+        const { body } = req;
 
-        const createUsuario = await prisma.user.create({
+        const senhaEncriptada = await bcrypt.hash(body.senha, 8);
+
+        const createUsuario = await prisma.usuario.create({
             data: {
-                ...body
+                ...body,
+                senha: senhaEncriptada
             }
-        });
+        })
 
-        return res.status(201).json({ content: createUsuario });
+        return res.status(201).json({ content: createUsuario }); 
     }
 
     async listarUsuario(req, res){
-        const listarUsuario = await prisma.user.findMany({
+        const listarUsuario = await prisma.usuario.findMany({
             where: {
                 situacao: 'ATIVADO'
             }
@@ -29,7 +32,7 @@ class UsuarioController {
     async loginUsuario(req, res){
         const { body } = req
 
-        const usuarioExist = await prisma.user.findFirst({
+        const usuarioExist = await prisma.usuario.findFirst({
             where: {
                 nome: body.nome
             }
@@ -37,21 +40,21 @@ class UsuarioController {
 
         try {
             if (!usuarioExist) {
-              return res.status(401).json({ menssage: "Não existe usuário cadastro com esses dados" });
+              throw new Error("Não existe usuário cadastro com esses dados");
             }
           } catch (error) {
             error.statusCode = 404;
             return next(error);
           }
 
-        const senhaConcidem = await bcryptjs.compare(body.senha, usuarioExist.senha);
+        const senhaConcidem = await bcrypt.compare(body.senha, usuarioExist.senha);
 
         
         try {
             if (!senhaConcidem) {
-              return res.status(401).json({ menssage: "Não existe usuário cadastro com esses dados" });
+              throw new Error("Não existe usuário cadastro com esses dados");
             }
-         }  catch (error) {
+         }  catch (error) { 
             error.statusCode = 404;
             return next(error);
          }

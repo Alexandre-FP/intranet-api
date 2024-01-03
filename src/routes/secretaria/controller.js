@@ -1,4 +1,5 @@
 import prisma from "../../db/index.js";
+import AppError from "../../utils/AppError.js";
 
 class SecretariaController {
 
@@ -24,7 +25,7 @@ class SecretariaController {
         });
 
         if(!buscarSecretariaId){
-            return res.status(401).json({ mensage: 'Secretaria não encontrada' })
+            throw new AppError("Secretaria não encontrada");
         }
 
         return res.status(200).json({ content: buscarSecretariaId })
@@ -50,7 +51,7 @@ class SecretariaController {
         });
 
         if(!buscarSecretariaId){
-            return res.status(401).json({ mensage: 'Secretaria não encontrada' })
+            throw new AppError('Secretaria não encontrada')
         }
 
         const atualizarSecretaria = await prisma.secretaria.update({

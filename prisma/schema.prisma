@@ -42,15 +42,39 @@ model Departamento {
 }
 
 model Telefone {
-  id               Int       @id       @default(autoincrement())
-  numero           String
+  id               Int       @id    @default(autoincrement())
+  numero           String           @unique
   criadoEm         DateTime         @default(now())
   images           String?
   atualizadoEm     DateTime         @updatedAt
   situacao         SituacaoEnum     @default(ATIVADO)
+  cargo            Cargo            @relation(fields: [cargoId], references: [id])
+  cargoId          Int 
   departamento     Departamento     @relation(fields: [departamentoId], references: [id])
-  departamentoId   Int
+  departamentoId   Int             
 
   @@map("telefones")
 } 
+
+model Cargo {
+  id               Int       @id    @default(autoincrement())
+  nome             String
+  criadoEm         DateTime         @default(now())
+  atualizadoEm     DateTime         @updatedAt
+  situacao         SituacaoEnum     @default(ATIVADO) 
+  telefones        Telefone[]
+
+  @@map("cargos") 
+}
+
+model User {
+  id               Int       @id       @default(autoincrement())
+  nome             String
+  senha            String
+  criadoEm         DateTime         @default(now())
+  atualizadoEm     DateTime         @updatedAt 
+  situacao         SituacaoEnum     @default(ATIVADO)
+
+  @@map("users")
+}
 

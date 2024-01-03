@@ -1,22 +1,43 @@
 import multer from "multer";
 import path from "path";
+import crypto from "crypto";
 
-export default {
-  storage: multer.diskStorage({
-    destination: path.join(__dirname, "..", "..", "uploads"),
-    filename(req, file, callback) {
-      callback(null, `${Date.now()}-${file.originalname}`);
+const storageTypes = {
+  local: multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, path.resolve(__dirname, "..", "..", "uploads"));
     },
+    filename: (req, file, cb) => {
+      crypto.randomBytes(16, (err, hash) => {
+        if (err) cb(err);
+
+        file.key = `${hash.toString("hex")}-${file.originalname}`;
+
+        cb(null, file.key);
+      }); 
+    }
   }),
+};
+ 
+export default {
+  dest: path.resolve(__dirname, "..", "..", "uploads"),
+  storage: storageTypes["local"],
   limits: {
-    fileSize: 8 * 1024 * 1024, // 8MB
+    fileSize: 2 * 1024 * 1024
   },
   fileFilter: (req, file, cb) => {
-    const mimeType = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
+    const allowedMimes = [
+      "image/jpeg",
+      "image/pjpeg",
+      "image/png",
+      "image/gif"
+    ];
 
-    if (!mimeType.includes(file.mimetype)) {
-      return cb(null, false);
+    if (allowedMimes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error("Invalid file type."));
     }
-    cb(null, true);
-  },
+  }
+
 }

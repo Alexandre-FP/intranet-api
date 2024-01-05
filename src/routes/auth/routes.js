@@ -6,7 +6,7 @@ const routes = Router();
 const usuarioController = new UsuarioController;
 
 routes.get("/listar-usuarios", AcessoRotas, usuarioController.listarUsuario);
-routes.post("/criar-usuario", AcessoRotas, usuarioController.createUsuario);
+routes.post("/criar-usuario", usuarioController.createUsuario);
 routes.post("/login", usuarioController.loginUsuario);
 
 export default routes; 

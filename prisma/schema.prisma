@@ -42,8 +42,9 @@ model Departamento {
 }
 
 model Telefone {
-  id               Int       @id    @default(autoincrement())
+  id               Int       @id    @default(autoincrement()) 
   numero           String           @unique
+  nome             String?
   criadoEm         DateTime         @default(now())
   images           String?
   atualizadoEm     DateTime         @updatedAt

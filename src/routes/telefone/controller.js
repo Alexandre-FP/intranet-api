@@ -3,14 +3,10 @@ import prisma from "../../db/index.js";
 class TelefoneController {
   async createTelefone(req, res){
     const { body } = req;
-    const { originalname } = req.file
 
     const createPhone = await prisma.telefone.create({
       data: {
         ...body,
-        images: originalname, 
-        departamentoId: 1, 
-        cargoId: 1,
       } 
     }); 
 

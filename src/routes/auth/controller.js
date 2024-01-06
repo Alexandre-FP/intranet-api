@@ -1,6 +1,7 @@
 import prisma from "../../db/index.js";
+import AppError from "../../utils/AppError.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs"
+import bcrypt from "bcrypt"
 import _ from "lodash";
 
 class UsuarioController {
@@ -20,11 +21,15 @@ class UsuarioController {
     }
 
     async listarUsuario(req, res){
-        const listarUsuario = await prisma.usuario.findMany({
-            where: {
-                situacao: 'ATIVADO'
-            }
-        });
+        const listarUsuario = await prisma.$queryRaw `
+            select id, nome, situacao from usuarios where situacao = 'ATIVADO'
+        `;
+
+        // const listarUsuario = await prisma.usuario.findMany({
+        //     where: {
+        //         situacao: 'ATIVADO'
+        //     }
+        // });  
 
         return res.status(200).json({ content: listarUsuario })
     }
@@ -32,32 +37,19 @@ class UsuarioController {
     async loginUsuario(req, res){
         const { body } = req
 
-        const usuarioExist = await prisma.usuario.findFirst({
-            where: {
-                nome: body.nome
-            }
-        });
+        const  [ usuarioExist ] = await prisma.$queryRaw`
+            select * from usuarios where nome = ${body.nome} 
+        `;
 
-        try {
-            if (!usuarioExist) {
-              throw new Error("Não existe usuário cadastro com esses dados");
-            }
-          } catch (error) {
-            error.statusCode = 404;
-            return next(error);
-          }
-
+        if (!usuarioExist) {
+            throw new AppError("Não existe usuário cadastro com esses dados");
+        }
+          
         const senhaConcidem = await bcrypt.compare(body.senha, usuarioExist.senha);
 
-        
-        try {
-            if (!senhaConcidem) {
-              throw new Error("Não existe usuário cadastro com esses dados");
-            }
-         }  catch (error) { 
-            error.statusCode = 404;
-            return next(error);
-         }
+        if (!senhaConcidem) {
+            throw new AppError("Não existe usuário cadastro com esses dados");
+        }
 
         
          const token = jwt.sign({ ..._.omit(usuarioExist, "senha") }, process.env.SECRET_PASS_JWT, {

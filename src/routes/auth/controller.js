@@ -21,24 +21,18 @@ class UsuarioController {
     }
 
     async listarUsuario(req, res){
-        const listarUsuario = await prisma.$queryRaw `
+        const listarUsuario = await prisma.$queryRaw`
             select id, nome, situacao from usuarios where situacao = 'ATIVADO'
         `;
 
-        // const listarUsuario = await prisma.usuario.findMany({
-        //     where: {
-        //         situacao: 'ATIVADO'
-        //     }
-        // });  
-
-        return res.status(200).json({ content: listarUsuario })
+        return res.status(200).json({ content: listarUsuario });
     }
 
     async loginUsuario(req, res){
         const { body } = req
 
         const  [ usuarioExist ] = await prisma.$queryRaw`
-            select * from usuarios where nome = ${body.nome} 
+            select * from usuarios where nome = ${ body.nome } 
         `;
 
         if (!usuarioExist) {

@@ -31,11 +31,13 @@ class UsuarioController {
     async loginUsuario(req, res){
         const { body } = req
 
-        const  [ usuarioExist ] = await prisma.$queryRaw`
-            select * from usuarios where nome = ${ body.nome } 
-        `;
+        const  usuarioExist  = await prisma.usuario.findFirst({
+            where: {
+                nome: body.nome
+            }
+        });
 
-        if (!usuarioExist) {
+        if (!usuarioExist) { 
             throw new AppError("Não existe usuário cadastro com esses dados");
         }
           
@@ -44,14 +46,14 @@ class UsuarioController {
         if (!senhaConcidem) {
             throw new AppError("Não existe usuário cadastro com esses dados");
         }
-
+ 
         
          const token = jwt.sign({ ..._.omit(usuarioExist, "senha") }, process.env.SECRET_PASS_JWT, {
             subject: String(usuarioExist.id),
             expiresIn: 60 * 60 * 3,
           });
       
-          return res.status(200).json({ content: { token, session: _.omit(usuarioExist, "senha") } });
+          return res.status(200).json({ content: { token, session: _.omit(usuarioExist, "senha") } }); 
         
     }
 }

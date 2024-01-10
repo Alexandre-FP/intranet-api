@@ -10,7 +10,7 @@ import { secretaria, departamento, telefone, cargo, auth } from "./routes/index.
 const app = express();
 
 app.use(json());
-// app.use(morgan("dev")); 
+app.use(morgan("dev")); 
 app.use(cors());
 app.use(urlencoded({ extended: false })); 
 

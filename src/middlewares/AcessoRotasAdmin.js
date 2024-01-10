@@ -1,22 +1,18 @@
 import jwt from "jsonwebtoken";
+import AppError from "../utils/AppError";
 
 export const AcessoRotas = (req, res, next) => {
   const token = req.headers.authorization;
- 
-  if (!token) {
-    return res.status(401).json({
-      message: "Token de usuário não existe",
-    });
-  }
 
+  if (!token) {
+    throw new AppError("JWT Token não existe", 401);
+  }
+  
   const [, tokenEncriptado] = token.split(" ");
   try {
     jwt.verify(tokenEncriptado, process.env.SECRET_PASS_JWT);
-
     return next();
-  } catch (err) {
-    return res.status(401).json({
-      message: "Token não é válido",
-    }); 
+  } catch {
+    throw new AppError("JWT Token inválido", 401);
   }
-};   
+};

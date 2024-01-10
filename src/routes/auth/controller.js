@@ -1,7 +1,7 @@
 import prisma from "../../db/index.js";
 import AppError from "../../utils/AppError.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import _ from "lodash";
 
 class UsuarioController {

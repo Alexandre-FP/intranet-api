@@ -36,8 +36,6 @@ class TelefoneController {
       where: {
         situacao: 'ATIVADO'
       },
-      take: 2,
-      skip: 1 
     });
 
     return res.status(200).json({ content: listarTelefone });

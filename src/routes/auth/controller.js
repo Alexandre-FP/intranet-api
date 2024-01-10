@@ -48,12 +48,12 @@ class UsuarioController {
         }
  
         
-         const token = jwt.sign({ ..._.omit(usuarioExist, "senha") }, process.env.SECRET_PASS_JWT, {
+        const token = jwt.sign({ ..._.omit(usuarioExist, "senha") }, process.env.SECRET_PASS_JWT, {
             subject: String(usuarioExist.id),
             expiresIn: 60 * 60 * 3,
           });
       
-          return res.status(200).json({ content: { token, session: _.omit(usuarioExist, "senha") } }); 
+        return res.status(200).json({ content: { token, session: _.omit(usuarioExist, "senha") } }); 
         
     }
 }

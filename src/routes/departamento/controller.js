@@ -23,9 +23,9 @@ class DepartamentoController {
             sigla: true
           }
         },
-        where: {
-          situacao: "DESATIVADO"
-        }
+      }, 
+      where: {
+        situacao: "DESATIVADO"
       }
     });
 

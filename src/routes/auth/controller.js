@@ -22,7 +22,7 @@ class UsuarioController {
 
     async listarUsuario(req, res){
         const listarUsuario = await prisma.$queryRaw`
-            select id, nome, situacao from usuarios where situacao = 'ATIVADO'
+            SELECT id, nome, situacao FROM usuarios WHERE situacao = 'ATIVADO'
         `;
 
         return res.status(200).json({ content: listarUsuario });

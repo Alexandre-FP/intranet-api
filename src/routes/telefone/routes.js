@@ -10,5 +10,7 @@ const router = Router();
 
 router.post("/criar-telefone", AcessoRotas, multer(multerConfig).single('images'), telefoneController.createTelefone);
 router.get("/listar-telefones", telefoneController.listarTelefone);
+router.get("/listar-telefone/:id", telefoneController.listarTelefoneId);
+router.put("/atualizar-telefone/:id", AcessoRotas, telefoneController.atualizarTelefone);
 
-export default router; 
+export default router;  

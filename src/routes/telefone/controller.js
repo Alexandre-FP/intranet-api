@@ -1,4 +1,5 @@
 import prisma from "../../db/index.js"; 
+import AppError from "../../utils/AppError.js";
 
 class TelefoneController {
   async createTelefone(req, res){
@@ -40,6 +41,48 @@ class TelefoneController {
 
     return res.status(200).json({ content: listarTelefone });
   }
+
+  async listarTelefoneId(req, res){
+    const { params } = req
+
+    const listarTelefoneId = await prisma.telefone.findUnique({
+      where: {
+        id: Number(params.id)
+      }
+    });
+
+    if(!listarTelefoneId){
+      throw new AppError('Não existe esse telefone')
+    }
+
+    return res.status(200).json({ content: listarTelefoneId });
+  }
+
+  async atualizarTelefone(req, res){
+    const { body, params } = req
+
+    const telefoneId = await prisma.telefone.findUnique({
+      where: {
+        id: Number(params.id),
+      }
+    });
+
+    if(!telefoneId){
+      throw new AppError('Telefone não existe')
+    }
+
+    const atualizarTelefone = await prisma.telefone.update({
+      where: {
+        id: telefoneId.id
+      },
+      data: {
+        ...body 
+      }
+    });
+
+    return res.status(200).json({ content: atualizarTelefone });
+  }
+
 }
 
 export default TelefoneController; 

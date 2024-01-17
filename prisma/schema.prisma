@@ -46,7 +46,6 @@ model Telefone {
   numero           String           @unique
   nome             String?
   criadoEm         DateTime         @default(now())
-  images           String?
   atualizadoEm     DateTime         @updatedAt
   situacao         SituacaoEnum     @default(ATIVADO)
   cargo            Cargo            @relation(fields: [cargoId], references: [id])

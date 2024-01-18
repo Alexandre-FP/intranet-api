@@ -25,7 +25,7 @@ class DepartamentoController {
         },
       }, 
       where: {
-        situacao: "DESATIVADO"
+        situacao: "ATIVADO"
       }
     });
 

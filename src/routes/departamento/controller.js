@@ -56,6 +56,23 @@ class DepartamentoController {
 
     return res.status(200).json({ content: atulaizarDepartamento });
   }
+
+  async departamentoGet(req, res){
+    const { params } = req
+
+    const departamentoId = await prisma.departamento.findUnique({
+      where: {
+        id: Number(params.id)
+      }
+    });
+
+    if(!departamentoId){
+      throw new AppError('Departamento não existe');
+    }
+
+
+    return res.status(200).json({ content: departamentoId }); 
+  }
 }
 
 export default DepartamentoController;

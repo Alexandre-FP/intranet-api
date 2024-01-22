@@ -44,8 +44,26 @@ class TelefoneController {
 
   async listarTelefoneId(req, res){
     const { params } = req
-
+    
     const listarTelefoneId = await prisma.telefone.findUnique({
+      include: {
+        departamento: {
+          select: {
+            id: true,
+            nome: true,
+            secretaria: {
+              select: {
+                nome: true
+              }
+            }
+          }
+        },
+        cargo: {
+          select: {
+            nome: true
+          }
+        },
+      },
       where: {
         id: Number(params.id)
       }
@@ -72,8 +90,8 @@ class TelefoneController {
     }
 
     const atualizarTelefone = await prisma.telefone.update({
-      where: {
-        id: telefoneId.id
+      where: { 
+        id: Number(params.id)
       },
       data: {
         ...body 

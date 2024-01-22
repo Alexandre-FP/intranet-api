@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import AppError from "../utils/AppError";
+import AppError from "../utils/AppError.js";
 
 export const AcessoRotas = (req, res, next) => {
   const token = req.headers.authorization;

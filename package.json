@@ -2,6 +2,7 @@
   "name": "intranet-api",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "dev": "nodemon --env-file .env src/server.js"
